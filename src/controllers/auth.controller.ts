@@ -25,19 +25,30 @@ export const signUp = async (req: Request, res: Response) => {
 
 export const login = async (req: Request, res: Response) => {
     const { email, password } = req.body;
-    console.log("LOGIN: ", email, password);
-    let user = await userClient.findFirst({ where: { email } });
+    let userResponse = await userClient.findFirst({ where: { email } });
 
-    if(!user) {
+    if(!userResponse) {
         throw Error('User already not found!');
     }
     // Compare the password
-    if(!compareSync(password, user.password)) {
+    if(!compareSync(password, userResponse.password)) {
         throw Error('Invalid password!');
     }
+    const user: userJWT = {
+        id: userResponse.id,
+        name: userResponse.name,
+        email: userResponse.email
+    };
     const token = jwt.sign({
-        userId: user.id
+        userId: user.id,
+        user
     }, JWT_SECRET);
 
     res.json({user, token});
+}
+
+type userJWT = {
+    id: string,
+    name: string,
+    email: string
 }
