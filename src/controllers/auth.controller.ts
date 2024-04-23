@@ -25,7 +25,7 @@ export const signUp = async (req: Request, res: Response) => {
 
 export const login = async (req: Request, res: Response) => {
     const { email, password } = req.body;
-
+    console.log("LOGIN: ", email, password);
     let user = await userClient.findFirst({ where: { email } });
 
     if(!user) {

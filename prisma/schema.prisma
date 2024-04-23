@@ -14,22 +14,21 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Author {
-  id    String @id @default(uuid())
-  name  String
-  books Book[]
-}
-
-model Book {
-  id       String @id @default(uuid())
-  author   Author @relation(fields: [authorId], references: [id])
-  authorId String
-  title    String
-}
-
 model User {
   id       String  @id @default(cuid())
-  name     String?
+  name     String
   email    String? @unique
   password String?
+  tasks    Task[]
+}
+
+model Task {
+  id            String   @id @default(cuid())
+  status        String   @default("TODO")
+  title         String
+  description   String?
+  creationDate  DateTime @default(now()) @map("creation_date") @db.Timestamp(6)
+  responsibleId String?  @map("responsible_id")
+  disabled      Boolean  @default(false)
+  responsible   User?    @relation(fields: [responsibleId], references: [id])
 }
