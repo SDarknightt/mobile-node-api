@@ -5,12 +5,12 @@ const taskClient = new PrismaClient().task;
 //Cria as tarefas diretamente vinculada ao usuario
 export const createTask = async (req, res) => {
     try {
-        const { title, description } = req.body;
+        const { title, description, user } = req.body;
         const newTask = await taskClient.create({
             data: {
                 title: title,
                 description: description,
-                responsibleId: req.body.user.userId,
+                responsibleId: user.id,
                 creationDate: new Date(),
             },
         });
@@ -22,9 +22,10 @@ export const createTask = async (req, res) => {
 
 export const getTasks = async (req, res) => {
     try {
+        const {user} = req.body;
         const responseTask = await taskClient.findMany({
             where: {
-                responsibleId: req.body.user.userId,
+                responsibleId: user.id,
             },
         });
         res.status(200).json({data: responseTask as Task[]});
