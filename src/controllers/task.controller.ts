@@ -15,8 +15,8 @@ export const createTask = async (req, res) => {
             },
         });
         res.status(200).json({data: newTask as Task});
-    } catch (error) {
-        throw new Error('Error creating task');
+    } catch (e) {
+        res.status(500).json({error: e.message});
     }
 };
 
@@ -30,7 +30,7 @@ export const getTasks = async (req, res) => {
         });
         res.status(200).json({data: responseTask as Task[]});
     } catch (e) {
-        throw new Error('Error getting user tasks');
+        res.status(500).json({error: e.message});
     }
 };
 
@@ -44,7 +44,7 @@ export const getTaskById = async (req, res) => {
         });
         res.status(200).json({data: responseTask as Task});
     } catch (e) {
-        throw new Error('Error getting task details');
+        res.status(500).json({error: e.message});
     }
 };
 
@@ -59,7 +59,7 @@ export const deleteTask = async (req, res) => {
         });
         res.status(200).json({data: responseTask as Task});
     } catch (e) {
-        throw Error("Error deleting task")
+        res.status(500).json({error: e.message});
     }
 };
 
@@ -85,6 +85,6 @@ export const editTask = async (req, res) => {
         });
         res.status(200).json({data: responseTask as Task});
     } catch (e) {
-        throw Error("Error editing task")
+        res.status(500).json({error: e.message});
     }
 };

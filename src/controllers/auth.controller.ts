@@ -11,7 +11,7 @@ export const signUp = async (req: Request, res: Response) => {
     let user = await userClient.findFirst({ where: { email } });
 
     if(user) {
-        throw Error('User already exists!');
+        res.status(400).json({message: 'User already exists!'});
     }
     user = await userClient.create({
         data: {
@@ -28,11 +28,11 @@ export const login = async (req: Request, res: Response) => {
     let userResponse = await userClient.findFirst({ where: { email } });
 
     if(!userResponse) {
-        throw Error('User already not found!');
+        res.status(400).json({message: 'User not found!'});
     }
     // Compare the password
     if(!compareSync(password, userResponse.password)) {
-        throw Error('Invalid password!');
+        res.status(400).json({message: 'Invalid password!'});
     }
     const user: userJWT = {
         id: userResponse.id,
