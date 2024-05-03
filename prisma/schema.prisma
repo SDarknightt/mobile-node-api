@@ -31,4 +31,5 @@ model Task {
   responsibleId String?  @map("responsible_id")
   disabled      Boolean  @default(false)
   responsible   User?    @relation(fields: [responsibleId], references: [id])
+  imageUrl      String?
 }
